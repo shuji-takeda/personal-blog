@@ -1,12 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { OTHER_SUBCATEGORIES } from '../data/categories';
 
 interface Props {
   post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, category, tags, isAffiliate } = post.data;
+const { title, description, pubDate, category, subcategory, tags, isAffiliate } = post.data;
 
 const formattedDate = new Intl.DateTimeFormat('ja-JP', {
   year: 'numeric',
@@ -17,7 +18,8 @@ const formattedDate = new Intl.DateTimeFormat('ja-JP', {
 const categoryBadge =
   category === 'tech'
     ? { text: '💻 Tech', class: 'bg-blue-50 text-blue-700 border-blue-200' }
-    : { text: '✈️ Travel', class: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+    : { text: '☕ Other', class: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+const subcategoryInfo = OTHER_SUBCATEGORIES.find((item) => item.slug === subcategory);
 ---
 
 <article class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
@@ -27,6 +29,14 @@ const categoryBadge =
         <span class={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${categoryBadge.class}`}>
           {categoryBadge.text}
         </span>
+        {subcategoryInfo && (
+          <a
+            href={`/category/other/${subcategoryInfo.slug}`}
+            class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100"
+          >
+            {subcategoryInfo.icon} {subcategoryInfo.label}
+          </a>
+        )}
         {isAffiliate && (
           <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
             PR

@@ -2,38 +2,36 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import { OTHER_SUBCATEGORIES } from '../../data/categories';
 
 export async function getStaticPaths() {
-  const categories = ['tech', 'travel'] as const;
+  const categories = ['tech', 'other'] as const;
   const allPosts = await getCollection('blog');
 
-  return categories.map((cat) => {
-    const filteredPosts = allPosts
-      .filter((post) => post.data.category === cat)
-      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-    return {
-      params: { category: cat },
-      props: { posts: filteredPosts, category: cat },
-    };
-  });
+  return categories.map((category) => ({
+    params: { category },
+    props: {
+      posts: allPosts
+        .filter((post) => post.data.category === category)
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+      category,
+    },
+  }));
 }
 
-const { category } = Astro.params;
-const { posts } = Astro.props;
-
+const { category, posts } = Astro.props;
 const categoryInfo = {
   tech: {
-    title: '💻 Tech（技術記事）',
-    description: 'Webフロントエンド開発、バックエンド、AI、ツールや開発知見に関する記事一覧です。',
+    title: '💻 Tech',
+    description: 'Web開発やツールについて、試したことや学びを記録した記事です。',
     color: 'text-blue-700 bg-blue-50 border-blue-200',
   },
-  travel: {
-    title: '✈️ Travel（旅行記事）',
-    description: '日本各地や海外への旅、おすすめ観光スポット、温泉宿、旅のTipsに関する記事一覧です。',
+  other: {
+    title: '☕ Other',
+    description: '旅やモノ、日々の気づきなど、技術以外の好きなことを綴っています。',
     color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
   },
-}[category as 'tech' | 'travel'];
+}[category as 'tech' | 'other'];
 ---
 
 <BaseLayout title={categoryInfo.title} description={categoryInfo.description}>
@@ -45,24 +43,38 @@ const categoryInfo = {
         </span>
         <span class="text-xs text-slate-500">{posts.length} 件の記事</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
-        {categoryInfo.title}
-      </h1>
-      <p class="text-slate-600 text-sm">
-        {categoryInfo.description}
-      </p>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">{categoryInfo.title}</h1>
+      <p class="text-slate-600 text-sm">{categoryInfo.description}</p>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      {posts.map((post) => (
-        <BlogCard post={post} />
-      ))}
-    </div>
-
-    {posts.length === 0 && (
-      <div class="text-center py-12 text-slate-500">
-        まだ記事がありません。
-      </div>
+    {category === 'other' && (
+      <nav aria-label="Otherのサブカテゴリ" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {OTHER_SUBCATEGORIES.map((subcategory) => {
+          const count = posts.filter((post) => post.data.subcategory === subcategory.slug).length;
+          return (
+            <a
+              href={`/category/other/${subcategory.slug}`}
+              class="p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-sm transition-all"
+            >
+              <span class="font-bold text-slate-800">{subcategory.icon} {subcategory.label}</span>
+              <p class="mt-1 text-sm text-slate-600">{subcategory.description}</p>
+              <p class="mt-2 text-xs text-slate-400">{count} 件の記事</p>
+            </a>
+          );
+        })}
+      </nav>
     )}
+
+    <section class="space-y-5">
+      <h2 class="text-lg font-bold text-slate-800">
+        {category === 'other' ? 'Otherの記事' : 'Techの記事'}
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {posts.map((post) => <BlogCard post={post} />)}
+      </div>
+      {posts.length === 0 && (
+        <p class="text-center py-12 text-slate-500">まだ記事がありません。</p>
+      )}
+    </section>
   </div>
 </BaseLayout>

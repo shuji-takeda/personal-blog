@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import { OTHER_SUBCATEGORIES } from '../../../data/categories';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+
+  return OTHER_SUBCATEGORIES.map((subcategory) => ({
+    params: { subcategory: subcategory.slug },
+    props: {
+      subcategory,
+      posts: allPosts
+        .filter(
+          (post) =>
+            post.data.category === 'other' && post.data.subcategory === subcategory.slug,
+        )
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { subcategory, posts } = Astro.props;
+---
+
+<BaseLayout title={`${subcategory.icon} ${subcategory.label}`} description={subcategory.description}>
+  <div class="max-w-4xl mx-auto space-y-8">
+    <header class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+      <a href="/category/other" class="text-sm font-medium text-brand-600 hover:underline">
+        ← Otherの一覧へ
+      </a>
+      <div class="flex items-center gap-3">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+          {subcategory.icon} {subcategory.label}
+        </h1>
+        <span class="text-xs text-slate-500">{posts.length} 件の記事</span>
+      </div>
+      <p class="text-slate-600 text-sm">{subcategory.description}</p>
+    </header>
+
+    <nav aria-label="Otherのサブカテゴリ" class="flex flex-wrap gap-2">
+      {OTHER_SUBCATEGORIES.map((item) => (
+        <a
+          href={`/category/other/${item.slug}`}
+          aria-current={item.slug === subcategory.slug ? 'page' : undefined}
+          class={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
+            item.slug === subcategory.slug
+              ? 'bg-emerald-100 text-emerald-800 border-emerald-200 font-semibold'
+              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          {item.icon} {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {posts.map((post) => <BlogCard post={post} />)}
+    </section>
+
+    {posts.length === 0 && (
+      <p class="text-center py-12 text-slate-500">このサブカテゴリの記事はまだありません。</p>
+    )}
+  </div>
+</BaseLayout>

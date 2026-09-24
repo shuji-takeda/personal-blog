@@ -4,6 +4,7 @@ import TableOfContents from '../components/TableOfContents.astro';
 import AdSlot from '../components/AdSlot.astro';
 import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
+import { OTHER_SUBCATEGORIES } from '../data/categories';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const { post, headings } = Astro.props;
-const { title, description, pubDate, updatedDate, category, tags, isAffiliate } = post.data;
+const { title, description, pubDate, updatedDate, category, subcategory, tags, isAffiliate } = post.data;
 
 const formattedPubDate = new Intl.DateTimeFormat('ja-JP', {
   year: 'numeric',
@@ -27,11 +28,12 @@ const formattedUpdatedDate = updatedDate
     }).format(updatedDate)
   : null;
 
-const categoryLabel = category === 'tech' ? '💻 Tech' : '✈️ Travel';
+const categoryLabel = category === 'tech' ? '💻 Tech' : '☕ Other';
 const categoryColor =
   category === 'tech'
     ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
     : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200';
+const subcategoryInfo = OTHER_SUBCATEGORIES.find((item) => item.slug === subcategory);
 ---
 
 <BaseLayout title={title} description={description}>
@@ -45,6 +47,14 @@ const categoryColor =
         >
           {categoryLabel}
         </a>
+        {subcategoryInfo && (
+          <a
+            href={`/category/other/${subcategoryInfo.slug}`}
+            class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+          >
+            {subcategoryInfo.icon} {subcategoryInfo.label}
+          </a>
+        )}
         <time datetime={pubDate.toISOString()} class="text-xs text-slate-500 font-medium">
           公開: {formattedPubDate}
         </time>

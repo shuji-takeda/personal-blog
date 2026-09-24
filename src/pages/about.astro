@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="自己紹介">
+  <div class="max-w-3xl mx-auto space-y-8">
+    <header class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+      <div class="space-y-2">
+        <p class="text-sm font-semibold text-brand-600">Software Engineer</p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Takeshu</h1>
+        <p class="text-slate-600 text-base leading-relaxed">
+          技術を楽しみ、旅先のおいしいものと自然に出会う。
+        </p>
+      </div>
+
+      <p class="text-slate-600 text-sm leading-relaxed">
+        会社の肩書はITコンサルタントですが、エンジニアと名乗りたい千葉在住30代です。
+        Web開発で気づいたことや学んだことを記録しながら、旅先ではラーメンをはじめとするおいしいものを探しています。
+        自然の中を歩いたり、海に潜ったりする時間も好きです。このブログでは、そんな日々の発見を気ままに綴ります。
+      </p>
+
+      <nav aria-label="プロフィールリンク" class="flex flex-wrap gap-3 pt-1">
+        <a href="https://qiita.com/takeshu17" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+          Qiita ↗
+        </a>
+        <a href="https://x.com/takeshshuhu" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+          X ↗
+        </a>
+        <a href="https://github.com/shuji-takeda" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+          GitHub ↗
+        </a>
+      </nav>
+    </header>
+
+    <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+      <div class="space-y-1">
+        <h2 class="text-xl font-bold text-slate-900">このブログについて</h2>
+        <p class="text-sm text-slate-600">技術と、旅先で出会うおいしいものや自然のこと。</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <article class="p-4 rounded-xl bg-blue-50/60 border border-blue-100">
+          <h3 class="font-bold text-blue-900 text-sm mb-2">💻 Tech</h3>
+          <p class="text-sm text-blue-800 leading-relaxed">
+            Web開発やツールについて、試したことや学びを自分の言葉で記録します。
+          </p>
+        </article>
+        <article class="p-4 rounded-xl bg-emerald-50/60 border border-emerald-100">
+          <h3 class="font-bold text-emerald-900 text-sm mb-2">✈️ Travel, Food &amp; Nature</h3>
+          <p class="text-sm text-emerald-800 leading-relaxed">
+            旅と食を中心に、ラーメンや各地のおいしいもの、トレッキングやスキューバーダイビングで出会った景色を綴ります。
+          </p>
+        </article>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
