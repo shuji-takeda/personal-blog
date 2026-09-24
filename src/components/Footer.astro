@@ -8,11 +8,25 @@ const currentYear = new Date().getFullYear();
     <div class="flex flex-col md:flex-row justify-between gap-6">
       <div class="max-w-md space-y-2">
         <div class="flex items-center gap-2 font-bold text-slate-800 text-base">
-          <span>🧭</span>
+          <!-- MacBookアイコン -->
+          <svg
+            class="w-5 h-5 text-slate-700"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"></path>
+            <path d="M2 19h20a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1Z"></path>
+            <path d="M10 16h4"></path>
+          </svg>
           <span>Takeda Log</span>
         </div>
         <p class="text-xs text-slate-500 leading-relaxed">
-          技術（Web開発・プログラミング）と旅（日本・世界の旅行記）を思いのままに綴る個人ブログ。
+          技術（Web開発・プログラミング）と日々の記録・旅行記を思いのままに綴る個人ブログ。
         </p>
       </div>
 
@@ -25,9 +39,20 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
-    <!-- コピーライト -->
-    <div class="pt-6 border-t border-slate-200 text-center text-xs text-slate-400">
-      &copy; {currentYear} Takeda Log. All rights reserved. Powered by Astro & Cloudflare Pages.
+    <!-- ナビゲーション & コピーライト -->
+    <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <nav class="flex items-center gap-4">
+        <a href="/" class="hover:text-slate-800 transition-colors">ホーム</a>
+        <a href="/category/tech" class="hover:text-slate-800 transition-colors">Tech</a>
+        <a href="/category/other" class="hover:text-slate-800 transition-colors">Other</a>
+        <a href="/about" class="font-semibold text-brand-600 hover:text-brand-700 hover:underline">
+          👤 自己紹介 (About)
+        </a>
+      </nav>
+
+      <div class="text-slate-400">
+        &copy; {currentYear} Takeda Log. All rights reserved.
+      </div>
     </div>
   </div>
 </footer>

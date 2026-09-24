@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogCard from '../../components/BlogCard.astro';
 
 export async function getStaticPaths() {
-  const categories = ['tech', 'travel'] as const;
+  const categories = ['tech', 'other'] as const;
   const allPosts = await getCollection('blog');
 
   return categories.map((cat) => {
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 
     return {
       params: { category: cat },
-      props: { posts: filteredPosts, category: cat },
+      props: { posts: filteredPosts, category: cat, allCategoryPosts: allPosts },
     };
   });
 }
@@ -22,18 +22,21 @@ export async function getStaticPaths() {
 const { category } = Astro.params;
 const { posts } = Astro.props;
 
+// Otherカテゴリ内のタグ一覧を取得（TravelやGadgetなどのサブジャンル絞り込み用）
+const subTags = category === 'other' ? [...new Set(posts.flatMap((p) => p.data.tags))] : [];
+
 const categoryInfo = {
   tech: {
     title: '💻 Tech（技術記事）',
-    description: 'Webフロントエンド開発、バックエンド、AI、ツールや開発知見に関する記事一覧です。',
+    description: 'Webフロントエンド開発、バックエンド、ツールや日々の開発知見に関する記事一覧です。',
     color: 'text-blue-700 bg-blue-50 border-blue-200',
   },
-  travel: {
-    title: '✈️ Travel（旅行記事）',
-    description: '日本各地や海外への旅、おすすめ観光スポット、温泉宿、旅のTipsに関する記事一覧です。',
+  other: {
+    title: '☕ Other（旅・日常・雑記）',
+    description: '旅行記、おすすめスポット、ガジェット、日常の雑記や思考メモなど、思いのままに綴る記事一覧です。',
     color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
   },
-}[category as 'tech' | 'travel'];
+}[category as 'tech' | 'other'];
 ---
 
 <BaseLayout title={categoryInfo.title} description={categoryInfo.description}>
@@ -51,6 +54,20 @@ const categoryInfo = {
       <p class="text-slate-600 text-sm">
         {categoryInfo.description}
       </p>
+
+      {subTags.length > 0 && (
+        <div class="pt-3 flex flex-wrap items-center gap-1.5 border-t border-slate-100">
+          <span class="text-xs text-slate-500 font-medium">ジャンル/タグ:</span>
+          {subTags.map((tag) => (
+            <a
+              href={`/tags/${tag}`}
+              class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 transition-colors border border-slate-200/60"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
     </header>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
