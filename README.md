@@ -1,6 +1,6 @@
-# Takeda Log - 個人ブログ (Tech & Travel)
+# Takeshu Life & Tech - 個人ブログ
 
-完全無料（\$0）かつドメイン代不要で運用できる、旅行記と技術記事のためのモダンな個人ブログです。
+完全無料（\$0）かつドメイン代不要で運用できる、Web開発技術と日々の旅・グルメ・思考を思いのままに綴るモダンな個人ブログです。
 
 ---
 
@@ -8,8 +8,9 @@
 
 - **完全無料ホスティング**: Cloudflare Pages 連携（無料ドメイン `*.pages.dev` / 転送量無制限）
 - **高速表示**: Astro (v5) + Tailwind CSS による初期JavaScriptゼロの爆速配信
-- **旅行 & 技術のハイブリッド**:
+- **Tech & Otherの2カテゴリ**:
   - 💻 **Tech**: Shikiによる美しいコードシンタックスハイライト、目次（TOC）自動生成、コードコピーボタン
+  - ☕ **Other**: Travel / 旅、Gadget / モノ、Life / 雑記、Book / 学びのサブカテゴリ
   - ✈️ **Travel**: 写真ギャラリー（`<PhotoGallery />`）、レスポンシブ配置
 - **収益化（アフィリエイト）サポート**:
   - おすすめ商品・予約リンクカード（`<ProductCard />`）
@@ -47,7 +48,8 @@ npm run preview
 title: "記事のタイトル"
 description: "記事の概要文（一覧ページやSEOに表示されます）"
 pubDate: 2026-09-25
-category: "travel" # "tech" または "travel"
+category: "other" # "tech" または "other"
+subcategory: "travel" # category が "other" の場合。travel / gadget / life / book
 tags: ["京都", "温泉", "国内旅行"]
 isAffiliate: true # アフィリエイトリンクを含む場合は true（自動でPR表記が出ます）
 ---

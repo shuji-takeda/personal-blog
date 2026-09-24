@@ -26,21 +26,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://personal
     <meta name="generator" content={Astro.generator} />
 
     <!-- SEO メタタグ -->
-    <title>{title} | Takeda Log</title>
-    <meta name="title" content={`${title} | Takeda Log`} />
+    <title>{title} | Takeshu Life & Tech</title>
+    <meta name="title" content={`${title} | Takeshu Life & Tech`} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- OGP / SNS共有用 -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
-    <meta property="og:title" content={`${title} | Takeda Log`} />
+    <meta property="og:title" content={`${title} | Takeshu Life & Tech`} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
 
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={`${title} | Takeda Log`} />
+    <meta property="twitter:title" content={`${title} | Takeshu Life & Tech`} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={image} />
   </head>

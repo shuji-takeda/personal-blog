@@ -3,12 +3,13 @@ title: "【週末旅行記】新緑の京都・嵐山と湯豆腐を巡る贅沢
 description: "週末を使って京都・嵐山へ。竹林の小径や保津川のせせらぎ、老舗の湯豆腐を堪能した旅行記です。宿泊したおすすめの温泉旅館もご紹介。"
 pubDate: 2026-09-23
 category: "other"
+subcategory: "travel"
 tags: ["京都", "嵐山", "国内旅行", "温泉", "グルメ"]
 isAffiliate: true
 ---
 
-import PhotoGallery from '../../components/PhotoGallery.astro';
-import ProductCard from '../../components/ProductCard.astro';
+import PhotoGallery from "../../components/PhotoGallery.astro";
+import ProductCard from "../../components/ProductCard.astro";
 
 初夏の爽やかな風が心地よい季節、ふらっと1泊2日で京都・嵐山を旅してきました。
 
@@ -26,13 +27,13 @@ import ProductCard from '../../components/ProductCard.astro';
     {
       src: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
       alt: "嵐山の竹林の小径",
-      caption: "早朝の竹林の小径。木漏れ日と静けさが心地よい。"
+      caption: "早朝の竹林の小径。木漏れ日と静けさが心地よい。",
     },
     {
       src: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
       alt: "渡月橋と保津川",
-      caption: "保津川にかかる渡月橋。遠くの山々が綺麗に映えます。"
-    }
+      caption: "保津川にかかる渡月橋。遠くの山々が綺麗に映えます。",
+    },
   ]}
 />
 
@@ -54,9 +55,13 @@ import ProductCard from '../../components/ProductCard.astro';
   badge="宿泊レポート"
   image="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80"
   links={[
-    { label: "楽天トラベルでプランを見る", url: "https://travel.rakuten.co.jp", primary: true },
+    {
+      label: "楽天トラベルでプランを見る",
+      url: "https://travel.rakuten.co.jp",
+      primary: true,
+    },
     { label: "じゃらんで空室確認", url: "https://jalan.net" },
-    { label: "一休.comで予約", url: "https://ikyu.com" }
+    { label: "一休.comで予約", url: "https://ikyu.com" },
   ]}
 />
 
