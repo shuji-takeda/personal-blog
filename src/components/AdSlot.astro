@@ -1,0 +1,23 @@
+---
+interface Props {
+  title?: string;
+  className?: string;
+}
+
+const { title = 'スポンサーリンク', className = '' } = Astro.props;
+---
+
+<div class={`my-8 rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-4 text-center ${className}`}>
+  <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+    {title}
+  </p>
+  <div class="flex items-center justify-center min-h-[90px] text-xs text-slate-400">
+    <slot>
+      <!-- デフォルトのプレースホルダー / 将来ここにA8やもしも、AdSenseのコードを配置 -->
+      <div class="space-y-1">
+        <p class="font-medium text-slate-500">広告・PR掲載スペース</p>
+        <p class="text-[11px] text-slate-400">（もしもアフィリエイト・A8.net等のバナーやリンクを配置可能）</p>
+      </div>
+    </slot>
+  </div>
+</div>

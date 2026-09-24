@@ -1,0 +1,78 @@
+---
+title: "完全無料で爆速！AstroとCloudflare Pagesで作る個人ブログ構築録"
+description: "ドメイン代やサーバー代をかけずに、完全無料（$0）で個人ブログを開設しました。技術選定の理由と収益化を見据えた設計について解説します。"
+pubDate: 2026-09-24
+category: "tech"
+tags: ["Astro", "TypeScript", "Cloudflare", "Web開発", "収益化"]
+isAffiliate: true
+---
+
+import ProductCard from '../../components/ProductCard.astro';
+
+個人ブログを作ろうと思い立ったとき、一番気になったのが **「維持コスト（ドメイン代・サーバー代）」** と **「メンテナンスの手間」** でした。
+
+「趣味で旅行や技術記事を書きたいだけなのに、毎月・毎年の固定費を払い続けるのはもったいない……」
+
+そこで今回は、**完全無料（\$0）** で維持でき、将来の収益化や音声入力による執筆にも対応できるモダンなブログを構築しました。
+
+## 1. なぜ Astro を選んだのか？
+
+フロントエンドのフレームワークには、いま静的サイト開発で圧倒的な人気を誇る **Astro (v5)** を採用しました。
+
+### Astro のメリット
+1. **初期 JavaScript が 0（超爆速）**:
+   通常の React や Next.js と違い、クライアント側に余計な JS を配信しないため、表示速度（Core Web Vitals）が極めて優秀です。
+2. **Markdown / MDX が扱いやすい**:
+   記事を Markdown で書けるのはもちろん、`MDX` を使うことで記事の中に React や Astro の UI コンポーネント（商品リンクカードなど）を直接埋め込めます。
+3. **画像の自動最適化**:
+   旅行記事などで写真が多くなっても、ビルド時に自動で WebP / AVIF への変換・軽量化を行ってくれます。
+
+```typescript
+// src/content/config.ts
+import { defineCollection, z } from 'astro:content';
+
+export const collections = {
+  blog: defineCollection({
+    type: 'content',
+    schema: ({ image }) => z.object({
+      title: z.string(),
+      description: z.string(),
+      pubDate: z.coerce.date(),
+      category: z.enum(['tech', 'travel']),
+      tags: z.array(z.string()).default([]),
+      isAffiliate: z.boolean().default(false),
+    }),
+  }),
+};
+```
+
+## 2. ホスティングは Cloudflare Pages が最強
+
+ホスティング先には **Cloudflare Pages** を選びました。
+
+- **帯域幅（転送量）が無制限**: 写真が多い記事でも追加課金やアクセス制限の心配がありません。
+- **無料ドメイン（`*.pages.dev`）が付属**: 独自ドメインを買わなくてもすぐに公開できます。
+- **Git Push で自動デプロイ**: GitHub に push するだけで、数十秒で全世界の CDN エッジに自動配信されます。
+
+## 3. 完全無料（ドメイン代\$0）での収益化戦略
+
+「独自ドメインがないと収益化できないのでは？」と思われがちですが、**ASPアフィリエイト（もしもアフィリエイト、A8.net、Amazonアソシエイト等）は無料サブドメインでも登録・提携可能**です。
+
+以下のように、記事内におすすめの技術書やガジェットを綺麗に紹介できるコンポーネントを用意しました：
+
+<ProductCard
+  title="実践 TypeScript & モダンフロントエンド開発入門"
+  description="型安全な設計思想から、AstroやNext.jsなどの最新フレームワークを活用した実践的なWeb開発手法が学べる決定版。"
+  badge="おすすめ技術書"
+  image="https://images.unsplash.com/photo-1532012164546-f432f2e3edd4?auto=format&fit=crop&w=400&q=80"
+  links={[
+    { label: "Amazonで見る", url: "https://amazon.co.jp", primary: true },
+    { label: "楽天ブックスで探す", url: "https://rakuten.co.jp" }
+  ]}
+/>
+
+## 4. 今後の展望
+
+今後は、ローカルで音声入力して文字起こししたテキストから自動で Markdown 記事のドラフトを生成するような自動化スクリプトも作成していく予定です。
+
+Astro はローカルの Markdown ファイルをそのままコンテンツとして扱えるため、外部ツールの連携も非常にシンプルに行えます。

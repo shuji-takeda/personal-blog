@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+
+export async function getStaticPaths() {
+  const categories = ['tech', 'travel'] as const;
+  const allPosts = await getCollection('blog');
+
+  return categories.map((cat) => {
+    const filteredPosts = allPosts
+      .filter((post) => post.data.category === cat)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return {
+      params: { category: cat },
+      props: { posts: filteredPosts, category: cat },
+    };
+  });
+}
+
+const { category } = Astro.params;
+const { posts } = Astro.props;
+
+const categoryInfo = {
+  tech: {
+    title: '💻 Tech（技術記事）',
+    description: 'Webフロントエンド開発、バックエンド、AI、ツールや開発知見に関する記事一覧です。',
+    color: 'text-blue-700 bg-blue-50 border-blue-200',
+  },
+  travel: {
+    title: '✈️ Travel（旅行記事）',
+    description: '日本各地や海外への旅、おすすめ観光スポット、温泉宿、旅のTipsに関する記事一覧です。',
+    color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+  },
+}[category as 'tech' | 'travel'];
+---
+
+<BaseLayout title={categoryInfo.title} description={categoryInfo.description}>
+  <div class="space-y-8">
+    <header class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
+      <div class="flex items-center gap-2">
+        <span class={`text-xs font-bold px-3 py-1 rounded-full border ${categoryInfo.color}`}>
+          Category
+        </span>
+        <span class="text-xs text-slate-500">{posts.length} 件の記事</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+        {categoryInfo.title}
+      </h1>
+      <p class="text-slate-600 text-sm">
+        {categoryInfo.description}
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {posts.map((post) => (
+        <BlogCard post={post} />
+      ))}
+    </div>
+
+    {posts.length === 0 && (
+      <div class="text-center py-12 text-slate-500">
+        まだ記事がありません。
+      </div>
+    )}
+  </div>
+</BaseLayout>

@@ -1,0 +1,139 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import AdSlot from '../components/AdSlot.astro';
+import type { MarkdownHeading } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  headings: MarkdownHeading[];
+}
+
+const { post, headings } = Astro.props;
+const { title, description, pubDate, updatedDate, category, tags, isAffiliate } = post.data;
+
+const formattedPubDate = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(pubDate);
+
+const formattedUpdatedDate = updatedDate
+  ? new Intl.DateTimeFormat('ja-JP', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(updatedDate)
+  : null;
+
+const categoryLabel = category === 'tech' ? '💻 Tech' : '✈️ Travel';
+const categoryColor =
+  category === 'tech'
+    ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+    : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200';
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-3xl mx-auto bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm">
+    <!-- ヘッダー情報 -->
+    <header class="space-y-4 pb-6 border-b border-slate-200">
+      <div class="flex flex-wrap items-center gap-2">
+        <a
+          href={`/category/${category}`}
+          class={`px-3 py-1 rounded-full text-xs font-bold transition-colors ${categoryColor}`}
+        >
+          {categoryLabel}
+        </a>
+        <time datetime={pubDate.toISOString()} class="text-xs text-slate-500 font-medium">
+          公開: {formattedPubDate}
+        </time>
+        {formattedUpdatedDate && (
+          <time datetime={updatedDate?.toISOString()} class="text-xs text-slate-400">
+            (更新: {formattedUpdatedDate})
+          </time>
+        )}
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+        {title}
+      </h1>
+
+      <p class="text-slate-600 text-sm leading-relaxed">
+        {description}
+      </p>
+
+      <!-- タグ一覧 -->
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          {tags.map((tag) => (
+            <a
+              href={`/tags/${tag}`}
+              class="text-xs px-2.5 py-0.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <!-- ステマ規制（景品表示法）対応：PR明記バナー -->
+      {isAffiliate && (
+        <aside class="mt-4 p-3 rounded-lg bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900 flex items-center gap-2">
+          <span>ℹ️</span>
+          <span>
+            本記事はアフィリエイト広告およびプロモーションを含んでいます。
+          </span>
+        </aside>
+      )}
+    </header>
+
+    <!-- 目次自動生成 -->
+    {headings.length > 0 && <TableOfContents headings={headings} />}
+
+    <!-- 記事本文 -->
+    <div class="prose prose-slate max-w-none pt-4 prose-headings:scroll-mt-20 prose-img:rounded-xl">
+      <slot />
+    </div>
+
+    <!-- 記事末尾の広告/スポンサースロット -->
+    <footer class="mt-12 pt-8 border-t border-slate-200">
+      <AdSlot title="スポンサーリンク" />
+
+      <div class="mt-8 flex justify-between items-center text-sm">
+        <a href="/" class="text-brand-600 hover:underline flex items-center gap-1 font-medium">
+          ← 記事一覧に戻る
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <!-- コードブロック コピーボタン機能 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const codeBlocks = document.querySelectorAll('pre');
+      codeBlocks.forEach((block) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'relative group';
+        block.parentNode?.insertBefore(wrapper, block);
+        wrapper.appendChild(block);
+
+        const button = document.createElement('button');
+        button.className =
+          'absolute top-2 right-2 px-2.5 py-1 text-xs font-semibold rounded bg-slate-800/80 text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-700';
+        button.innerText = 'Copy';
+
+        button.addEventListener('click', async () => {
+          const code = block.querySelector('code')?.innerText || block.innerText;
+          await navigator.clipboard.writeText(code);
+          button.innerText = 'Copied!';
+          setTimeout(() => {
+            button.innerText = 'Copy';
+          }, 2000);
+        });
+
+        wrapper.appendChild(button);
+      });
+    });
+  </script>
+</BaseLayout>

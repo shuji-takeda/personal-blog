@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  const uniqueTags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
+
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts
+      .filter((post) => post.data.tags.includes(tag))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return {
+      params: { tag },
+      props: { posts: filteredPosts, tag },
+    };
+  });
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag} の記事一覧`}>
+  <div class="space-y-8">
+    <header class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+          Tag
+        </span>
+        <span class="text-xs text-slate-500">{posts.length} 件の記事</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+        #{tag}
+      </h1>
+      <p class="text-slate-600 text-sm">
+        「{tag}」タグが付いた記事の一覧です。
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {posts.map((post) => (
+        <BlogCard post={post} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

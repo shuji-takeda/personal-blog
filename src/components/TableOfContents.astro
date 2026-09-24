@@ -1,0 +1,33 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// H2とH3のみを目次として抽出
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <nav class="my-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
+    <p class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+      <span>📑</span>
+      <span>目次</span>
+    </p>
+    <ul class="space-y-1.5 text-sm">
+      {filteredHeadings.map((heading) => (
+        <li class={heading.depth === 3 ? 'ml-4' : ''}>
+          <a
+            href={`#${heading.slug}`}
+            class="text-slate-600 hover:text-brand-600 hover:underline transition-colors block py-0.5"
+          >
+            {heading.depth === 3 ? '・' : ''}{heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
